@@ -1,0 +1,29 @@
+name: Update Users JSON
+
+on:
+  schedule:
+    - cron: "0 6 * * *"  # Executa todo dia às 6h UTC
+  workflow_dispatch:      # Permite rodar manualmente pelo GitHub
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Update users.json
+        run: |
+          echo '[
+            {"id": 1, "name": "Alice", "email": "alice@example.com", "signup_date": "'$(date +%Y-%m-%d)'"},
+            {"id": 2, "name": "Bob", "email": "bob@example.com", "signup_date": "'$(date -d "yesterday" +%Y-%m-%d)'"},
+            {"id": 3, "name": "Charlie", "email": "charlie@example.com", "signup_date": "'$(date -d "2 days ago" +%Y-%m-%d)'"}
+          ]' > data/users.json
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/users.json
+          git commit -m "Auto update users.json"
+          git push
