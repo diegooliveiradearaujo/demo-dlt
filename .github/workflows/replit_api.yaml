@@ -26,38 +26,38 @@ jobs:
       - name: Convert CSV to JSON
         run: |
           python - <<EOF
-import pandas as pd
-import sys
-import os
-
-CSV_FILE = "customer_sales/sales.csv"
-JSON_FILE = "customer_sales/sales.json"
-
-# Verifica se o arquivo CSV existe
-if not os.path.exists(CSV_FILE):
-    print(f"CSV file {CSV_FILE} not found!")
-    sys.exit(1)
-
-try:
-    # Lê CSV com encoding seguro
-    df = pd.read_csv(CSV_FILE, encoding="utf-8-sig")
-    df.columns = df.columns.str.strip()  # Remove espaços extras
-except Exception as e:
-    print("Error reading CSV:", e)
-    sys.exit(1)
-
-# Seleciona apenas as colunas esperadas
-expected_cols = ['sale_id','customer_id','product_id','product_name','quantity','price','sale_date']
-df = df[[c for c in expected_cols if c in df.columns]]
-
-# Converte para JSON
-try:
-    df.to_json(JSON_FILE, orient="records", date_format="iso", indent=2)
-    print(f"JSON file generated at {JSON_FILE}")
-except Exception as e:
-    print("Error converting to JSON:", e)
-    sys.exit(1)
-EOF
+          import pandas as pd
+          import sys
+          import os
+          
+          CSV_FILE = "customer_sales/sales.csv"
+          JSON_FILE = "customer_sales/sales.json"
+          
+          # Verifica se o arquivo CSV existe
+          if not os.path.exists(CSV_FILE):
+              print(f"CSV file {CSV_FILE} not found!")
+              sys.exit(1)
+          
+          try:
+              # Lê CSV com encoding seguro
+              df = pd.read_csv(CSV_FILE, encoding="utf-8-sig")
+              df.columns = df.columns.str.strip()  # Remove espaços extras
+          except Exception as e:
+              print("Error reading CSV:", e)
+              sys.exit(1)
+          
+          # Seleciona apenas as colunas esperadas
+          expected_cols = ['sale_id','customer_id','product_id','product_name','quantity','price','sale_date']
+          df = df[[c for c in expected_cols if c in df.columns]]
+          
+          # Converte para JSON
+          try:
+              df.to_json(JSON_FILE, orient="records", date_format="iso", indent=2)
+              print(f"JSON file generated at {JSON_FILE}")
+          except Exception as e:
+              print("Error converting to JSON:", e)
+              sys.exit(1)
+          EOF
 
       - name: Commit and push JSON
         run: |
