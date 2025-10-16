@@ -17,8 +17,10 @@ jobs:
           echo '[
             {"id": 1, "name": "Alice", "email": "alice@example.com", "signup_date": "'$(date +%Y-%m-%d)'"},
             {"id": 2, "name": "Bob", "email": "bob@example.com", "signup_date": "'$(date -d "yesterday" +%Y-%m-%d)'"},
-            {"id": 3, "name": "Charlie", "email": "charlie@example.com", "signup_date": "'$(date -d "2 days ago" +%Y-%m-%d)'"}
-          ]' > data/users.json
+            {"id": 3, "name": "Charlie", "email": "charlie@example.com", "signup_date": "'$(date -d "2 days ago" +%Y-%m-%d)'"},
+            {"id": 4, "name": "Diego", "email": "diego@example.com", "signup_date": "'$(date -d "3 days ago" +%Y-%m-%d)'"}
+
+          ]' > demo-dlt/user.json
 
       - name: Commit and Push
         run: |
