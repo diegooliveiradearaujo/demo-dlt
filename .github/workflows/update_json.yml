@@ -20,7 +20,7 @@ jobs:
             {"id": 3, "name": "Charlie", "email": "charlie@example.com", "signup_date": "'$(date -d "2 days ago" +%Y-%m-%d)'"},
             {"id": 4, "name": "Diego", "email": "diego@example.com", "signup_date": "'$(date -d "3 days ago" +%Y-%m-%d)'"}
 
-          ]' > demo-dlt/user.json
+          ]' > user.json
 
       - name: Commit and Push
         run: |
