@@ -1,0 +1,42 @@
+name: Fetch Sales CSV from Replit
+
+on:
+  schedule:
+    - cron: "*/2 * * * *"  # Executa a cada 2 minutos
+  workflow_dispatch:       # Permite rodar manualmente
+
+jobs:
+  fetch-sales:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download sales.csv from Replit
+        run: |
+          # URL pública do Replit
+          REPLIT_URL="https://89ae3733-2767-4f8e-8c6e-116106bc1b14-00-1udmefojyb6dl.riker.replit.dev/sales.csv"
+          
+          # Baixar arquivo CSV
+          curl -L $REPLIT_URL -o sales.csv
+          
+          # Verificar conteúdo
+          head -n 5 sales.csv
+
+      # Opcional: converter para JSON se quiser
+      - name: Convert CSV to JSON
+        run: |
+          python - <<EOF
+          import pandas as pd
+          df = pd.read_csv("sales.csv")
+          df.to_json("sales.json", orient="records", indent=2)
+          EOF
+
+      # Opcional: commit do JSON atualizado
+      - name: Commit and push JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sales.json
+          git commit -m "Auto-update sales.json [$(date)]" || echo "No changes to commit"
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
