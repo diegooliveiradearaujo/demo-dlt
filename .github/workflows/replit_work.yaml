@@ -12,18 +12,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+
       - name: Download sales.csv from Replit
         run: |
-          # URL pública do Replit
           REPLIT_URL="https://89ae3733-2767-4f8e-8c6e-116106bc1b14-00-1udmefojyb6dl.riker.replit.dev/sales.csv"
-          
-          # Baixar arquivo CSV
           curl -L $REPLIT_URL -o sales.csv
-          
-          # Verificar conteúdo
           head -n 5 sales.csv
 
-      # Opcional: converter para JSON se quiser
       - name: Convert CSV to JSON
         run: |
           python - <<EOF
