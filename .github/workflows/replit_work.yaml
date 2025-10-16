@@ -36,8 +36,8 @@ jobs:
       - name: Convert CSV to JSON
         run: |
           python - <<EOF
-import pandas as pd
-import json
+          import pandas as pd
+          import json
 
 try:
     df = pd.read_csv("sales.csv")
