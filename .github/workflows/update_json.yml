@@ -26,6 +26,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add users.json
-          git commit -m "Auto update users.json"
+          git add user.json
+          git commit -m "Auto update user.json"
           git push
