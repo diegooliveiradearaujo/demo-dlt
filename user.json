@@ -1,20 +1,7 @@
 [
-  {
-    "id": 1,
-    "name": "Alice",
-    "email": "alice@example.com",
-    "signup_date": "2025-10-15"
-  },
-  {
-    "id": 2,
-    "name": "Bob",
-    "email": "bob@example.com",
-    "signup_date": "2025-10-14"
-  },
-  {
-    "id": 3,
-    "name": "Charlie",
-    "email": "charlie@example.com",
-    "signup_date": "2025-10-13"
-  }
+  {"id": 1, "name": "Alice", "email": "alice@example.com", "signup_date": "2025-10-16"},
+  {"id": 2, "name": "Bob", "email": "bob@example.com", "signup_date": "2025-10-15"},
+  {"id": 3, "name": "Charlie", "email": "charlie@example.com", "signup_date": "2025-10-14"},
+  {"id": 4, "name": "Diego", "email": "diego@example.com", "signup_date": "2025-10-13"}
+
 ]
