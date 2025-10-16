@@ -1,46 +1,59 @@
-name: Fetch Sales CSV from Replit
+name: Update Sales JSON from Replit
 
 on:
   schedule:
-    - cron: "*/2 * * * *"  # Executa a cada 2 minutos
-  workflow_dispatch:       # Permite rodar manualmente
+    - cron: "0 6 * * *"  # todo dia às 6h UTC
+  workflow_dispatch:      # permite rodar manualmente
 
 jobs:
-  fetch-sales:
+  update-json:
     runs-on: ubuntu-latest
     steps:
+      # 1️⃣ Checkout do repositório
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Python
+      # 2️⃣ Instalar dependências Python
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas
+          pip install pandas requests
 
+      # 3️⃣ Baixar CSV do Replit
       - name: Download sales.csv from Replit
         run: |
-          REPLIT_URL="https://89ae3733-2767-4f8e-8c6e-116106bc1b14-00-1udmefojyb6dl.riker.replit.dev/sales.csv"
-          curl -L $REPLIT_URL -o sales.csv
+          REPLIT_CSV_URL="https://<SEU_SUBDOMINIO>.repl.co/files/sales.csv"
+          curl -o sales.csv "$REPLIT_CSV_URL"
+          echo "Downloaded CSV:"
           head -n 5 sales.csv
 
+      # 4️⃣ Converter CSV para JSON
       - name: Convert CSV to JSON
         run: |
           python - <<EOF
-          import pandas as pd
-          df = pd.read_csv("sales.csv")
-          df.to_json("sales.json", orient="records", indent=2)
-          EOF
+import pandas as pd
+import json
 
-      # Opcional: commit do JSON atualizado
-      - name: Commit and push JSON
+try:
+    df = pd.read_csv("sales.csv")
+except Exception as e:
+    print("Error reading CSV:", e)
+    exit(1)
+
+# Converte para JSON
+df.to_json("sales.json", orient="records", date_format="iso", indent=2)
+EOF
+
+      # 5️⃣ Commit e push do JSON atualizado
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add sales.json
-          git commit -m "Auto-update sales.json [$(date)]" || echo "No changes to commit"
+          git commit -m "Update sales.json [$(date)]" || echo "No changes to commit"
           git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
